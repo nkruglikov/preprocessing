@@ -20,9 +20,10 @@ re_text = re.compile(r'\\maketitle(.*?)'
 
 def detex(string):
     buf = bytes(string, encoding='utf8')
-    return subprocess.check_output(['detex', '-l', '-e',
+    result = subprocess.check_output(['detex', '-l', '-e',
         '\'array,eqnarray,equation,figure,mathmatica,'
         'picture,table,verbatim,align,multline\''], input=buf).decode('utf8')
+    return re.sub(r'<Picture .*?>', '', result)
 
 def normalize(string):
     return re.sub(r'(\s)+', r' ', string, flags=re.M|re.L|re.DOTALL)
