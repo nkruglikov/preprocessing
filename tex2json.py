@@ -6,6 +6,7 @@ import string
 import nltk
 import pickle
 import json
+import multiprocessing
 
 # Define regexps
 re_title = re.compile(r'\\title.*?\{(.*?)\}', flags=re.DOTALL|re.L|re.M)
@@ -50,7 +51,6 @@ def jsonize(word):
 
 def process_tex(tex_filename):
     raw_tex = open(tex_filename).read()
-    print('Processing %s...' % tex_filename)
 
     # Get title, author and text from document; apply mystem
     title = normalize(detex(re.search(re_title, raw_tex).groups()[0]))
@@ -82,8 +82,13 @@ def process_tex(tex_filename):
     open(tex_filename + '.json', 'w').write(json.dumps(document,
         ensure_ascii=False))
 
-for filename in sys.argv[1:]:
+def process_file(filename):
+    print('Processing %s...' % filename)
     try:
         process_tex(filename)
     except Exception as err:
         print("ERROR:", err)
+
+if __name__ == '__main__':
+    with multiprocessing.Pool(processes=2) as pool:
+        pool.map(process_file, sys.argv[1:])
