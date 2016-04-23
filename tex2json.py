@@ -10,7 +10,9 @@ import json
 # Define regexps
 re_title = re.compile(r'\\title.*?\{(.*?)\}', re.DOTALL|re.L|re.M)
 re_author = re.compile(r'\\author.*?\{(.*?)\}', re.DOTALL|re.L|re.M)
-re_text = re.compile(r'\\maketitle(.*)\\end\{document\}', re.DOTALL|re.L|re.M)
+re_text = re.compile(r'\\maketitle(.*?)'
+    r'(?:\\begin\{thebibliography\}.*\\end\{thebibliography\}.*)?'
+    r'\\end\{document\}', re.DOTALL|re.L|re.M)
 #re_norm_spaces = re.compile(r'(\s)+', re.DOTALL|re.L|re.M)
 #re_norm_mystem = re.compile(r'\?+\}', re.DOTALL|re.L|re.M)
 #re_jsonize = re.compile(r'(\w*)\{(.*?)\}', re.DOTALL|re.L|re.M)
